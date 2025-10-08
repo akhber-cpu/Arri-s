@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ariel Akhber — Portfolio</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg: #0c0f12;
+      --panel: rgba(20,22,28,0.72);
+      --panel-border: rgba(255,255,255,0.06);
+      --text: #e7eaee;
+      --muted: #a7b0bd;
+      --accent: #76a9ff;
+      --accent-2: #8a7bff;
+      --radius: 24px;
+      --shadow: 0 10px 40px rgba(0,0,0,0.45);
+    }
+
+    * { box-sizing: border-box; scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(1200px 800px at 70% -10%, #151a23 0%, #0d1117 50%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .site-wrap { max-width: 1120px; margin: 0 auto; padding: 24px clamp(16px, 3vw, 28px); }
+    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+    .brand-mark { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg,var(--accent),var(--accent-2)); display: grid; place-items: center; color:#0a0e13; font-weight:800; }
+
+    .cta {
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--panel-border);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: clamp(20px, 3.4vw, 36px);
+    }
+
+    /* Hero */
+    .hero { text-align: center; margin-bottom: 24px; }
+    .sub { color: var(--muted); font-size: clamp(14px, 2.1vw, 18px); margin: 0; }
+
+    /* Projects Grid */
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 22px 0 28px;
+    }
+    @media (max-width: 900px) {
+      .projects { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .projects { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      position: relative;
+      background: #000;
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 18px;
+      overflow: hidden;
+      min-height: 200px;
+      cursor: pointer;
+      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.5), 0 6px 18px rgba(118,169,255,.2);
+      border-color: rgba(118,169,255,.3);
+    }
+
+    .thumb {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      transition: transform .6s ease, filter .6s ease;
+    }
+    .card:hover .thumb { transform: scale(1.08); filter: brightness(1.1); }
+
+    /* About + Social */
+    .about {
+      text-align: center;
+      max-width: 720px;
+      margin: 40px auto 10px;
+    }
+    .about h4 { margin: 0 0 12px; font-size: 18px; }
+    .about p { margin: 0; color: var(--muted); line-height: 1.7; font-size: 15px; }
+
+    .social-links {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .social-links a {
+      color: var(--text);
+      margin: 0 14px;
+      font-size: 26px;
+      transition: color .2s;
+    }
+    .social-links a:hover { color: var(--accent); }
+
+    /* Modal */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.85); justify-content: center; align-items: center; z-index: 999; }
+    .modal-content { width: 80%; max-width: 800px; aspect-ratio: 16/9; background: #000; }
+    .modal iframe { width: 100%; height: 100%; border: none; }
+    .close { position: absolute; top: 20px; right: 30px; font-size: 40px; color: #fff; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="site-wrap">
+    <header>
+      <div class="brand">
+        <div class="brand-mark">AA</div>
+        <div class="brand-name">Ariel Akhber</div>
+      </div>
+      <a href="#contact" class="cta">Let’s Connect</a>
+    </header>
+
+    <main class="panel">
+      <!-- Hero -->
+      <section class="hero">
+        <p class="sub">Creative Marketing Video Editor focused on engagement and results.</p>
+      </section>
+
+      <!-- Projects (6 cards) -->
+      <section class="projects">
+        <article class="card" onclick="openModal('8QjhPqj04_M')">
+          <img class="thumb" src="https://img.youtube.com/vi/8QjhPqj04_M/hqdefault.jpg" alt="">
+        </article>
+
+        <article class="card" onclick="openModal('7mzELoA_4TA')">
+          <img class="thumb" src="https://img.youtube.com/vi/7mzELoA_4TA/hqdefault.jpg" alt="">
+        </article>
+
+        <article class="card" onclick="openModal('eIkSXcvXmnU')">
+          <img class="thumb" src="https://img.youtube.com/vi/eIkSXcvXmnU/hqdefault.jpg" alt="">
+        </article>
+
+        <article class="card" onclick="openModal('sNv0KbdY40A')">
+          <img class="thumb" src="https://img.youtube.com/vi/sNv0KbdY40A/hqdefault.jpg" alt="">
+        </article>
+
+        <article class="card" onclick="openModal('4ocju5hdgsI')">
+          <img class="thumb" src="https://img.youtube.com/vi/4ocju5hdgsI/hqdefault.jpg" alt="">
+        </article>
+
+        <article class="card" onclick="openModal('XCvmRAv60n0')">
+          <img class="thumb" src="https://img.youtube.com/vi/XCvmRAv60n0/hqdefault.jpg" alt="">
+        </article>
+      </section>
+
+      <!-- About + Social -->
+      <section id="contact">
+        <div class="about">
+          <h4>ABOUT ME</h4>
+          <p>Experienced video editor with a background in news and branded content, currently specializing in direct response advertising. My work balances precision with a focus on viewer attention and engagement.</p>
+        </div>
+        <div class="social-links">
+          <a href="mailto:akhber@gmail.com"><i class="fas fa-envelope"></i></a>
+          <a href="https://www.linkedin.com/in/ariel-akhber-a75b20251" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://www.instagram.com/arielakhber/" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/@Arristube" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Video Modal -->
+  <div id="videoModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="modal-content">
+      <iframe id="videoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    function openModal(videoId){
+      document.getElementById("videoModal").style.display = "flex";
+      document.getElementById("videoFrame").src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+    }
+    function closeModal(){
+      document.getElementById("videoModal").style.display = "none";
+      document.getElementById("videoFrame").src = "";
+    }
+  </script>
+</body>
+</html>
