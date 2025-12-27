@@ -12,6 +12,7 @@
 
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <div class="site-wrap">
     <header>
@@ -30,13 +31,15 @@
         </h1>
       </section>
 
-      <section class="projects" id="projectsGrid"></section>
+      <!-- IMPORTANT: gallery container must exist for JS render -->
+      <section class="projects" id="projectsGrid" aria-label="Video gallery"></section>
 
       <section id="contact">
         <div class="about">
           <h4>ABOUT ME</h4>
           <p>Experienced video editor with a background in news and branded content, currently specializing in direct response advertising. My work balances precision with a focus on viewer attention and engagement.</p>
         </div>
+
         <div class="social-links">
           <a href="mailto:akhber@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
           <a href="https://www.linkedin.com/in/ariel-akhber-a75b20251" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
@@ -46,32 +49,35 @@
     </main>
   </div>
 
+  <!-- Modal -->
   <div id="videoModal" class="modal" aria-hidden="true">
-    <button class="close" onclick="closeModal()" aria-label="Close video">×</button>
+    <button class="close" type="button" aria-label="Close video">×</button>
     <div class="modal-content" role="dialog" aria-modal="true">
       <iframe id="videoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
   </div>
 
   <script>
-    function openModal(videoId){
+    // ---------- Modal ----------
+    function openModal(videoId) {
       const modal = document.getElementById("videoModal");
+      const frame = document.getElementById("videoFrame");
+
       modal.style.display = "flex";
       modal.setAttribute("aria-hidden", "false");
-
-      document.getElementById("videoFrame").src =
-        "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+      frame.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
     }
 
-    function closeModal(){
+    function closeModal() {
       const modal = document.getElementById("videoModal");
+      const frame = document.getElementById("videoFrame");
+
       modal.style.display = "none";
       modal.setAttribute("aria-hidden", "true");
-
-      document.getElementById("videoFrame").src = "";
+      frame.src = "";
     }
 
-    // Gallery order (A–H) — A ↔ F applied
+    // ---------- Gallery data (A–H, A ↔ F applied) ----------
     const videos = [
       { id: "cFrAQUphw9w", title: "New Project 8" },          // A
       { id: "8QjhPqj04_M", title: "Cholesterol" },            // B
@@ -87,8 +93,8 @@
       const grid = document.getElementById("projectsGrid");
       if (!grid) return;
 
-      const cardsHtml = videos.map(v => `
-        <article class="card" onclick="openModal('${v.id}')">
+      const cards = videos.map(v => `
+        <article class="card" data-video-id="${v.id}" role="button" tabindex="0" aria-label="${v.title}">
           <img
             class="thumb"
             src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"
@@ -98,37 +104,70 @@
         </article>
       `).join("");
 
-      const comingSoonHtml = `
+      const comingSoon = `
         <article class="card placeholder" aria-label="Coming soon">
           <div class="placeholder-text">Coming Soon</div>
         </article>
       `;
 
-      grid.innerHTML = cardsHtml + comingSoonHtml;
+      grid.innerHTML = cards + comingSoon;
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    // ---------- Init ----------
+    document.addEventListener("DOMContentLoaded", () => {
       renderGallery();
 
-      const connectBtn = document.querySelector('.cta');
-      const contactSection = document.getElementById('contact');
+      // click handler (no inline onclick)
+      const grid = document.getElementById("projectsGrid");
+      if (grid) {
+        grid.addEventListener("click", (e) => {
+          const card = e.target.closest(".card[data-video-id]");
+          if (!card) return;
+          openModal(card.dataset.videoId);
+        });
+
+        // keyboard open (Enter/Space)
+        grid.addEventListener("keydown", (e) => {
+          if (e.key !== "Enter" && e.key !== " ") return;
+          const card = e.target.closest(".card[data-video-id]");
+          if (!card) return;
+          e.preventDefault();
+          openModal(card.dataset.videoId);
+        });
+      }
+
+      // close modal button
+      const closeBtn = document.querySelector(".close");
+      if (closeBtn) closeBtn.addEventListener("click", closeModal);
+
+      // close on overlay click
+      const modal = document.getElementById("videoModal");
+      if (modal) {
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) closeModal();
+        });
+      }
+
+      // close on ESC
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+
+      // Let’s Connect glow
+      const connectBtn = document.querySelector(".cta");
+      const contactSection = document.getElementById("contact");
 
       if (connectBtn && contactSection) {
-        connectBtn.addEventListener('click', function (e) {
+        connectBtn.addEventListener("click", (e) => {
           e.preventDefault();
 
-          contactSection.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-          });
+          contactSection.scrollIntoView({ behavior: "smooth", block: "center" });
 
-          contactSection.classList.remove('glow');
+          contactSection.classList.remove("glow");
           void contactSection.offsetWidth;
-          contactSection.classList.add('glow');
+          contactSection.classList.add("glow");
 
-          setTimeout(() => {
-            contactSection.classList.remove('glow');
-          }, 1800);
+          setTimeout(() => contactSection.classList.remove("glow"), 1800);
         });
       }
     });
