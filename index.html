@@ -1,129 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ariel Akhber — Portfolio</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ariel Akhber — Portfolio</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="site-wrap">
-        <header>
-            <div class="brand">
-                <div class="brand-mark">AA</div>
-                <div class="brand-name">Ariel Akhber</div>
-            </div>
-            <a href="#contact" class="cta">Let’s Connect</a>
-        </header>
+  <div class="site-wrap">
+    <header>
+      <div class="brand">
+        <div class="brand-mark">AA</div>
+        <div class="brand-name">Ariel Akhber</div>
+      </div>
+      <a href="#contact" class="cta">Let’s Connect</a>
+    </header>
 
-        <main class="panel">
-            <section class="hero">
-                <h1>VIDEO EDITOR & AI VISUAL CREATOR</h1>
-            </section>
+    <main class="panel">
+      <section class="hero">
+        <h1 class="hero-title">
+          <span class="line-main">VIDEO EDITOR</span>
+          <span class="line-sub">& AI VISUAL CREATOR</span>
+        </h1>
+      </section>
 
-            <!-- Gallery (rendered via JS for easy reordering) -->
-            <section class="projects" id="projectsGrid"></section>
+      <section class="projects" id="projectsGrid"></section>
 
-            <section id="contact">
-                <div class="about">
-                    <h4>ABOUT ME</h4>
-                    <p>Experienced video editor with a background in news and branded content, currently specializing in direct response advertising. My work balances precision with a focus on viewer attention and engagement.</p>
-                </div>
-                <div class="social-links">
-                    <a href="mailto:akhber@gmail.com"><i class="fas fa-envelope"></i></a>
-                    <a href="https://www.linkedin.com/in/ariel-akhber-a75b20251" target="_blank"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://www.instagram.com/arielakhber/" target="_blank"><i class="fab fa-instagram"></i></a>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <div id="videoModal" class="modal">
-        <span class="close" onclick="closeModal()">×</span>
-        <div class="modal-content">
-            <iframe id="videoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <section id="contact">
+        <div class="about">
+          <h4>ABOUT ME</h4>
+          <p>Experienced video editor with a background in news and branded content, currently specializing in direct response advertising. My work balances precision with a focus on viewer attention and engagement.</p>
         </div>
+        <div class="social-links">
+          <a href="mailto:akhber@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+          <a href="https://www.linkedin.com/in/ariel-akhber-a75b20251" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          <a href="https://www.instagram.com/arielakhber/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="videoModal" class="modal" aria-hidden="true">
+    <button class="close" onclick="closeModal()" aria-label="Close video">×</button>
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <iframe id="videoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
+  </div>
 
-    <script>
-        function openModal(videoId){
-            document.getElementById("videoModal").style.display = "flex";
-            document.getElementById("videoFrame").src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
-        }
+  <script>
+    function openModal(videoId){
+      const modal = document.getElementById("videoModal");
+      modal.style.display = "flex";
+      modal.setAttribute("aria-hidden", "false");
 
-        function closeModal(){
-            document.getElementById("videoModal").style.display = "none";
-            document.getElementById("videoFrame").src = "";
-        }
+      document.getElementById("videoFrame").src =
+        "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+    }
 
-        // Gallery order (A–H) — unique, no duplicates
-        const videos = [
-            { id: "Ojvk73VGJRs", title: "New Project 7" },         // A
-            { id: "8QjhPqj04_M", title: "Cholesterol" },           // B
-            { id: "sNv0KbdY40A", title: "Social Media Campaign" }, // C
-            { id: "XCvmRAv60n0", title: "Short Form Ad" },         // D
-            { id: "4ocju5hdgsI", title: "Product Launch" },        // E
-            { id: "cFrAQUphw9w", title: "New Project 8" },         // F
-            { id: "7mzELoA_4TA", title: "Baking Soda Ad" },        // G
-            { id: "eIkSXcvXmnU", title: "Turmeric Omega Launch" }  // H
-        ];
+    function closeModal(){
+      const modal = document.getElementById("videoModal");
+      modal.style.display = "none";
+      modal.setAttribute("aria-hidden", "true");
 
-        function renderGallery() {
-            const grid = document.getElementById("projectsGrid");
-            if (!grid) return;
+      document.getElementById("videoFrame").src = "";
+    }
 
-            const cardsHtml = videos.map(v => `
-                <article class="card" onclick="openModal('${v.id}')">
-                    <img
-                        class="thumb"
-                        src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"
-                        alt="Video thumbnail for ${v.title}"
-                    >
-                </article>
-            `).join("");
+    // Gallery order (A–H) — A ↔ F applied
+    const videos = [
+      { id: "cFrAQUphw9w", title: "New Project 8" },          // A
+      { id: "8QjhPqj04_M", title: "Cholesterol" },            // B
+      { id: "sNv0KbdY40A", title: "Social Media Campaign" },  // C
+      { id: "XCvmRAv60n0", title: "Short Form Ad" },          // D
+      { id: "4ocju5hdgsI", title: "Product Launch" },         // E
+      { id: "Ojvk73VGJRs", title: "New Project 7" },          // F
+      { id: "7mzELoA_4TA", title: "Baking Soda Ad" },         // G
+      { id: "eIkSXcvXmnU", title: "Turmeric Omega Launch" }   // H
+    ];
 
-            const comingSoonHtml = `
-                <article class="card placeholder">
-                    <div class="placeholder-text">Coming Soon</div>
-                </article>
-            `;
+    function renderGallery() {
+      const grid = document.getElementById("projectsGrid");
+      if (!grid) return;
 
-            grid.innerHTML = cardsHtml + comingSoonHtml;
-        }
+      const cardsHtml = videos.map(v => `
+        <article class="card" onclick="openModal('${v.id}')">
+          <img
+            class="thumb"
+            src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"
+            alt="Video thumbnail for ${v.title}"
+            loading="lazy"
+          >
+        </article>
+      `).join("");
 
-        // GLOW effect on ABOUT ME section when clicking 'Let’s Connect'
-        document.addEventListener('DOMContentLoaded', function () {
-            renderGallery();
+      const comingSoonHtml = `
+        <article class="card placeholder" aria-label="Coming soon">
+          <div class="placeholder-text">Coming Soon</div>
+        </article>
+      `;
 
-            const connectBtn = document.querySelector('.cta');
-            const contactSection = document.getElementById('contact');
+      grid.innerHTML = cardsHtml + comingSoonHtml;
+    }
 
-            if (connectBtn && contactSection) {
-                connectBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+      renderGallery();
 
-                    contactSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    });
+      const connectBtn = document.querySelector('.cta');
+      const contactSection = document.getElementById('contact');
 
-                    // Restart the CSS animation
-                    contactSection.classList.remove('glow');
-                    void contactSection.offsetWidth;
-                    contactSection.classList.add('glow');
+      if (connectBtn && contactSection) {
+        connectBtn.addEventListener('click', function (e) {
+          e.preventDefault();
 
-                    setTimeout(() => {
-                        contactSection.classList.remove('glow');
-                    }, 1800);
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+          contactSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+
+          contactSection.classList.remove('glow');
+          void contactSection.offsetWidth;
+          contactSection.classList.add('glow');
+
+          setTimeout(() => {
+            contactSection.classList.remove('glow');
+          }, 1800);
