@@ -10,8 +10,8 @@
   --shadow: 0 10px 40px rgba(0,0,0,0.45);
 }
 
-/* Base */
 * { box-sizing: border-box; scroll-behavior: smooth; }
+
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -66,19 +66,20 @@ header {
   color: #fff;
   padding: 10px 18px;
   border-radius: 999px;
-  cursor: pointer;
   text-decoration: none;
   font-weight: 600;
-  transition: background-color .2s, border-color .2s, transform .2s;
+  transition: background-color .2s, transform .2s;
 }
 .cta:hover {
   background: #5a95e7;
-  border-color: #5a95e7;
   transform: translateY(-1px);
 }
 
 /* Hero */
-.hero { text-align: center; margin-bottom: 24px; }
+.hero {
+  text-align: center;
+  margin-bottom: 24px;
+}
 
 .hero-title {
   display: flex;
@@ -89,7 +90,7 @@ header {
 }
 
 .hero-title .line-main {
-  font-size: clamp(2.4rem, 5vw, 3rem);
+  font-size: clamp(2.9rem, 5vw, 3.5rem); /* +~8px */
   font-weight: 700;
   letter-spacing: 0.03em;
 }
@@ -127,16 +128,11 @@ header {
   min-height: 200px;
   cursor: pointer;
   transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
-  outline: none;
 }
 .card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 32px rgba(0,0,0,.5), 0 6px 18px rgba(118,169,255,.2);
   border-color: rgba(118,169,255,.3);
-}
-.card:focus-visible {
-  box-shadow: 0 0 0 2px rgba(118,169,255,.6), 0 12px 32px rgba(0,0,0,.5);
-  border-color: rgba(118,169,255,.45);
 }
 
 .thumb {
@@ -152,7 +148,6 @@ header {
   filter: brightness(1.1);
 }
 
-/* Placeholder */
 .card.placeholder {
   cursor: default;
   background: #1a1e26;
@@ -162,23 +157,24 @@ header {
 .card.placeholder:hover {
   transform: none;
   box-shadow: none;
-  border-color: rgba(255,255,255,.06);
 }
+
 .placeholder-text {
   color: var(--muted);
-  font-weight: 500;
   font-size: 1.1rem;
   opacity: 0.6;
 }
 
-/* Contact + glow */
+/* Contact */
 #contact {
   margin-top: 40px;
   border-radius: 24px;
   padding: 32px 24px 24px;
-  position: relative;
 }
-#contact.glow { animation: contactGlow 1.6s ease-out; }
+
+#contact.glow {
+  animation: contactGlow 1.6s ease-out;
+}
 
 @keyframes contactGlow {
   0% { box-shadow: 0 0 0 0 rgba(118,169,255,0); }
@@ -196,11 +192,16 @@ header {
   margin: 0 auto 10px;
 }
 .about h4 { margin: 0 0 12px; font-size: 18px; }
-.about p { margin: 0; color: var(--muted); line-height: 1.7; font-size: 15px; }
+.about p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 15px;
+}
 
 .social-links {
   text-align: center;
-  margin: 20px 0 0;
+  margin-top: 20px;
 }
 .social-links a {
   color: var(--text);
@@ -222,8 +223,29 @@ header {
   justify-content: center;
   align-items: center;
   z-index: 999;
-  padding: 24px;
 }
 
 .modal-content {
-  width: min(
+  width: min(900px, 92vw);
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.modal iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.close {
+  position: fixed;
+  top: 18px;
+  right: 22px;
+  font-size: 40px;
+  color: #fff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
