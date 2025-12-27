@@ -24,46 +24,11 @@
 
         <main class="panel">
             <section class="hero">
-                <h1>Video Editor & Creator</h1>
-                </section>
-
-            <section class="projects">
-                <article class="card" onclick="openModal('8QjhPqj04_M')">
-                    <img class="thumb" src="https://img.youtube.com/vi/8QjhPqj04_M/hqdefault.jpg" alt="Video thumbnail for Cholesterol Enths">
-                </article>
-
-                <article class="card" onclick="openModal('7mzELoA_4TA')">
-                    <img class="thumb" src="https://img.youtube.com/vi/7mzELoA_4TA/hqdefault.jpg" alt="Video thumbnail for Baking Soda Ad">
-                </article>
-
-                <article class="card" onclick="openModal('eIkSXcvXmnU')">
-                    <img class="thumb" src="https://img.youtube.com/vi/eIkSXcvXmnU/hqdefault.jpg" alt="Video thumbnail for Turmeric Omega Launch">
-                </article>
-
-                <article class="card" onclick="openModal('sNv0KbdY40A')">
-                    <img class="thumb" src="https://img.youtube.com/vi/sNv0KbdY40A/hqdefault.jpg" alt="Video thumbnail for Social Media Campaign">
-                </article>
-
-                <article class="card" onclick="openModal('4ocju5hdgsI')">
-                    <img class="thumb" src="https://img.youtube.com/vi/4ocju5hdgsI/hqdefault.jpg" alt="Video thumbnail for Product Launch">
-                </article>
-
-                <article class="card" onclick="openModal('XCvmRAv60n0')">
-                    <img class="thumb" src="https://img.youtube.com/vi/XCvmRAv60n0/hqdefault.jpg" alt="Video thumbnail for Short Form Ad">
-                </article>
-
-                <article class="card" onclick="openModal('Ojvk73VGJRs')">
-                    <img class="thumb" src="https://img.youtube.com/vi/Ojvk73VGJRs/hqdefault.jpg" alt="Video thumbnail for New Project 7">
-                </article>
-                
-                <article class="card" onclick="openModal('cFrAQUphw9w')">
-                    <img class="thumb" src="https://img.youtube.com/vi/cFrAQUphw9w/hqdefault.jpg" alt="Video thumbnail for New Project 8">
-                </article>
-                
-                <article class="card placeholder">
-                    <div class="placeholder-text">Coming Soon</div>
-                </article>
+                <h1>VIDEO EDITOR & AI VISUAL CREATOR</h1>
             </section>
+
+            <!-- Gallery (rendered via JS for easy reordering) -->
+            <section class="projects" id="projectsGrid"></section>
 
             <section id="contact">
                 <div class="about">
@@ -94,11 +59,48 @@
 
         function closeModal(){
             document.getElementById("videoModal").style.display = "none";
-            document.getElementById("videoFrame").src = ""; 
+            document.getElementById("videoFrame").src = "";
+        }
+
+        // Gallery order (A–H) — unique, no duplicates
+        const videos = [
+            { id: "Ojvk73VGJRs", title: "New Project 7" },         // A
+            { id: "8QjhPqj04_M", title: "Cholesterol" },           // B
+            { id: "sNv0KbdY40A", title: "Social Media Campaign" }, // C
+            { id: "XCvmRAv60n0", title: "Short Form Ad" },         // D
+            { id: "4ocju5hdgsI", title: "Product Launch" },        // E
+            { id: "cFrAQUphw9w", title: "New Project 8" },         // F
+            { id: "7mzELoA_4TA", title: "Baking Soda Ad" },        // G
+            { id: "eIkSXcvXmnU", title: "Turmeric Omega Launch" }  // H
+        ];
+
+        function renderGallery() {
+            const grid = document.getElementById("projectsGrid");
+            if (!grid) return;
+
+            const cardsHtml = videos.map(v => `
+                <article class="card" onclick="openModal('${v.id}')">
+                    <img
+                        class="thumb"
+                        src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"
+                        alt="Video thumbnail for ${v.title}"
+                    >
+                </article>
+            `).join("");
+
+            const comingSoonHtml = `
+                <article class="card placeholder">
+                    <div class="placeholder-text">Coming Soon</div>
+                </article>
+            `;
+
+            grid.innerHTML = cardsHtml + comingSoonHtml;
         }
 
         // GLOW effect on ABOUT ME section when clicking 'Let’s Connect'
         document.addEventListener('DOMContentLoaded', function () {
+            renderGallery();
+
             const connectBtn = document.querySelector('.cta');
             const contactSection = document.getElementById('contact');
 
