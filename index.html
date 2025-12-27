@@ -31,6 +31,7 @@
         </h1>
       </section>
 
+      <!-- 3x3 gallery (9 items only, no placeholder) -->
       <section class="projects" id="projectsGrid" aria-label="Video gallery"></section>
 
       <section id="contact">
@@ -77,6 +78,7 @@
       frame.src = "";
     }
 
+    // 9 videos = 3x3 grid
     const videos = [
       { id: "cFrAQUphw9w", title: "New Project 8" },
       { id: "8QjhPqj04_M", title: "Cholesterol" },
@@ -93,15 +95,15 @@
       const grid = document.getElementById("projectsGrid");
       if (!grid) return;
 
-      grid.innerHTML =
-        videos.map(v => `
-          <article class="card" data-video-id="${v.id}">
-            <img
-              class="thumb"
-              src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"
-              alt="Video thumbnail for ${v.title}"
-              loading="lazy">
-         </article>`;
+      grid.innerHTML = videos.map(v => `
+        <article class="card" data-video-id="${v.id}">
+          <img
+            class="thumb"
+            src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"
+            alt="Video thumbnail for ${v.title}"
+            loading="lazy">
+        </article>
+      `).join("");
 
       grid.addEventListener("click", (e) => {
         const card = e.target.closest(".card[data-video-id]");
@@ -114,19 +116,24 @@
       renderGallery();
 
       document.querySelector(".close")?.addEventListener("click", closeModal);
+
       const modal = document.getElementById("videoModal");
       modal?.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+
       document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
+      // Let’s Connect glow
       const connectBtn = document.querySelector(".cta");
       const contactSection = document.getElementById("contact");
       if (connectBtn && contactSection) {
         connectBtn.addEventListener("click", (e) => {
           e.preventDefault();
           contactSection.scrollIntoView({ behavior: "smooth", block: "center" });
+
           contactSection.classList.remove("glow");
           void contactSection.offsetWidth;
           contactSection.classList.add("glow");
+
           setTimeout(() => contactSection.classList.remove("glow"), 1800);
         });
       }
@@ -134,4 +141,3 @@
   </script>
 </body>
 </html>
-
