@@ -1,149 +1,596 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ariel Akhber — Portfolio</title>
+  <title>Ariel Akhber — Video Editor & AI Visual Creator</title>
+  <meta name="description" content="Ariel Akhber, video editor and AI visual creator. Performance-driven ads, UGC and AI creative — from the first reference to the final cut." />
+
+  <!-- SHARE PREVIEW (WhatsApp / LinkedIn / X)
+       PLACEHOLDER: once the site has an address, replace YOUR-DOMAIN below,
+       and put a 1200x630 image named og.jpg next to index.html -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Ariel Akhber — Video Editor & AI Visual Creator" />
+  <meta property="og:description" content="Performance-driven ads, UGC and AI creative — from the first reference to the final cut." />
+  <meta property="og:url" content="https://YOUR-DOMAIN/" />
+  <meta property="og:image" content="https://YOUR-DOMAIN/og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23111110'/%3E%3Cpath d='M9 11c8 0 6 10 14 10' stroke='%23EEEBE3' stroke-width='1.6' fill='none'/%3E%3Ccircle cx='9' cy='11' r='3.2' fill='%23a294ff'/%3E%3Ccircle cx='23' cy='21' r='3.2' fill='%23EEEBE3'/%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
 </head>
-
 <body>
-  <div class="site-wrap">
-    <header>
-      <div class="brand">
-        <div class="brand-mark">AA</div>
-        <div class="brand-name">Ariel Akhber</div>
+  <header class="site-header">
+    <button class="wordmark" type="button" data-home>Ariel Akhber</button>
+    <nav class="nav-right">
+      <span class="status"><span class="dot"></span> Available for freelance</span>
+      <div class="menu" id="workMenu">
+        <button class="nav-btn menu-btn" type="button" id="workBtn" aria-haspopup="true" aria-expanded="false" aria-controls="workList">Work
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg>
+        </button>
+        <div class="menu-list" id="workList" role="menu" aria-label="Work"></div>
       </div>
-      <a href="#contact" class="cta">Let’s Connect</a>
-    </header>
+      <button class="nav-btn" type="button" data-goto="intro">About</button>
+      <button class="nav-btn" type="button" data-goto="connect">Contact</button>
+    </nav>
+  </header>
 
-    <main class="panel">
-      <section class="hero">
-        <h1 class="hero-title">
-          <span class="line-main">VIDEO EDITOR</span>
-          <span class="line-sub">& AI VISUAL CREATOR</span>
-        </h1>
-      </section>
-
-      <!-- 3x3 gallery (9 items only, no placeholder) -->
-      <section class="projects" id="projectsGrid" aria-label="Video gallery"></section>
-
-      <section id="contact">
-        <div class="about">
-          <h4>ABOUT ME</h4>
-          <p>
-            Hi, I’m Ariel 👋
-I edit and create promotional video content for social media, combining creative tools and AI with a strong sense of visuals.
-I’m passionate about building engaging content that supports the idea and helps content convert.
-Feel free to reach out anytime.
-          </p>
-        </div>
-
-        <div class="social-links">
-          <a href="mailto:akhber@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-          <a href="https://www.linkedin.com/in/ariel-akhber-a75b20251" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-          <a href="https://www.instagram.com/arielakhber/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- Modal -->
-  <div id="videoModal" class="modal" aria-hidden="true">
-    <button class="close" type="button" aria-label="Close video">×</button>
-    <div class="modal-content" role="dialog" aria-modal="true">
-      <iframe id="videoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  <div class="canvas" id="canvas">
+    <div class="world" id="world">
+      <svg class="wires" id="wires" xmlns="http://www.w3.org/2000/svg"></svg>
+      <svg class="wires wires--top" id="wiresTop" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
   </div>
 
+  <div class="canvas-hint" id="hint">Scroll or drag to explore · pinch to zoom</div>
+  <div class="toolbar">
+    <button class="tool" type="button" id="zoomOut" aria-label="Zoom out">&minus;</button>
+    <span class="zoom-val" id="zoomVal">100%</span>
+    <button class="tool" type="button" id="zoomIn" aria-label="Zoom in">+</button>
+    <span class="tool-sep"></span>
+    <button class="tool" type="button" id="homeBtn" aria-label="Back to start" title="Back to start">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+  </div>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <button class="modal-close" type="button" aria-label="Close video">×</button>
+    <div class="modal-content" id="modalContent" role="dialog" aria-modal="true" aria-label="Video player">
+      <iframe id="frame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <button class="modal-close lb-close" type="button" aria-label="Close">×</button>
+    <button class="lb-nav lb-prev" type="button" aria-label="Previous">‹</button>
+    <figure class="lb-fig" role="dialog" aria-modal="true" aria-label="Process viewer"><div class="lb-media" id="lbMedia"></div><figcaption class="lb-cap" id="lbCap"></figcaption></figure>
+    <button class="lb-nav lb-next" type="button" aria-label="Next">›</button>
+  </div>
+
   <script>
-    function openModal(videoId) {
-      const modal = document.getElementById("videoModal");
-      const frame = document.getElementById("videoFrame");
-      modal.style.display = "flex";
-      modal.setAttribute("aria-hidden", "false");
-      frame.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
-    }
+    document.documentElement.classList.remove('no-js');
 
-    function closeModal() {
-      const modal = document.getElementById("videoModal");
-      const frame = document.getElementById("videoFrame");
-      modal.style.display = "none";
-      modal.setAttribute("aria-hidden", "true");
-      frame.src = "";
-    }
+    /* =========================================================
+       CONTENT — edit here
+       ---------------------------------------------------------
+       A clip looks like:
+         { id:"YouTubeId", title:"", loop:"", aspect:"", process:null }
+         id       YouTube id — plays in the player and gives the thumbnail.
+                  Leave it "" to show a placeholder card.
+         title    optional caption on hover
+         loop     optional short muted video file that plays on hover,
+                  e.g. "videos/ai-01.mp4" (3–5 s, no audio, vertical)
+         aspect   "16/9" for a horizontal video (default is vertical)
+         process  optional "how it was made" chain — see PROCESS below
+       Tag colors: change `color` to recolor a tag everywhere.
+       ========================================================= */
+    const TAGS = {
+      intro:   { tag:"@intro",         color:"#bdb6a8" },
+      hits:    { tag:"@highlights",    color:"#bdb6a8" },
+      ai:      { tag:"@ai",            color:"#a294ff" },
+      ugc:     { tag:"@ugc",           color:"#e2b45e" },
+      more:    { tag:"@more",          color:"#e58c70" },
+      connect: { tag:"@connect",       color:"#6fc496" },
+      process: { tag:"@process",       color:"#a294ff" }
+    };
 
-    // 9 videos = 3x3 grid
-    const videos = [
-  { id: "cFrAQUphw9w", title: "New Project 8" },        // A
-  { id: "8QjhPqj04_M", title: "Cholesterol" },          // B
-  { id: "sNv0KbdY40A", title: "Social Media Campaign" },// C
-
-  { id: "4ocju5hdgsI", title: "Product Launch" },       // D
-  { id: "OjoqOQoX3vs", title: "New Project 10" },        // E
-  { id: "Q4pcstfcHyA", title: "New Project 9" }         // F
-];
-
-
-    function renderGallery() {
-      const grid = document.getElementById("projectsGrid");
-      if (!grid) return;
-
-      grid.innerHTML = videos.map(v => `
-        <article class="card" data-video-id="${v.id}">
-          <img
-            class="thumb"
-            src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"
-            alt="Video thumbnail for ${v.title}"
-            loading="lazy">
-        </article>
-      `).join("");
-
-      grid.addEventListener("click", (e) => {
-        const card = e.target.closest(".card[data-video-id]");
-        if (!card) return;
-        openModal(card.dataset.videoId);
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      renderGallery();
-
-      document.querySelector(".close")?.addEventListener("click", closeModal);
-
-      const modal = document.getElementById("videoModal");
-      modal?.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-
-      document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
-
-      // Let’s Connect glow
-      const connectBtn = document.querySelector(".cta");
-      const contactSection = document.getElementById("contact");
-      if (connectBtn && contactSection) {
-        connectBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          contactSection.scrollIntoView({ behavior: "smooth", block: "center" });
-
-          contactSection.classList.remove("glow");
-          void contactSection.offsetWidth;
-          contactSection.classList.add("glow");
-
-          setTimeout(() => contactSection.classList.remove("glow"), 1800);
-        });
+    /* PROCESSES — "how it's made" for a project.
+       Each item: { src:"file", cap:"caption" }. src can be an image (.jpg) or a video (.mp4);
+       the small tile picture is read from the thumbs/ folder next to it (same name, .jpg).
+       final.id = YouTube id of the edited film ("" shows a placeholder).
+       To link a gallery clip to its process, add  process:"nepal"  to that clip. */
+    const P = "process/nepal/";
+    const PROCESSES = {
+      nepal: {
+        name: "Nepal terraces",
+        meta: "Anime short for Blink · Magnific Spaces · Seedance · After Effects",
+        steps: [
+          { key:"refs", title:"REFERENCES", sub:"real photos", shape:"land", items:[
+              { src:P+"ref-1-himalaya.jpg",  cap:"Snow peaks" },
+              { src:P+"ref-2-terraces.jpg",  cap:"Terraced hillside" },
+              { src:P+"ref-3-viewpoint.jpg", cap:"Ridge-top viewpoint" } ],
+            note:"The look and the geography to build from." },
+          { key:"assets", title:"ASSETS", sub:"characters / locations", shape:"land", items:[
+              { src:P+"cha-elad.jpg",    cap:"Elad, character sheet" },
+              { src:P+"cha-noa.jpg",     cap:"Noa, character sheet" },
+              { src:P+"loc-climb.jpg",   cap:"Location: the climb" },
+              { src:P+"loc-hill.jpg",    cap:"Location: the hill" },
+              { src:P+"loc-terrace.jpg", cap:"Location: the paddy" } ],
+            note:"Locked characters and fixed locations, reused in every shot." },
+          { key:"images", title:"IMAGES", sub:"key frames", shape:"vert", items:[
+              { src:P+"kf-crest.jpg",      cap:"Reaching the crest" },
+              { src:P+"kf-viewpoint.jpg",  cap:"At the viewpoint" },
+              { src:P+"kf-noa-farmer.jpg", cap:"Noa imagines herself as a farmer" } ],
+            note:"First and end frames for each shot." },
+          { key:"videos", title:"VIDEOS", sub:"generated shots", shape:"vert", items:[
+              { src:P+"v-climb.mp4",  cap:"The climb" },
+              { src:P+"v-noa.mp4",    cap:"Noa at the crest" },
+              { src:P+"v-reveal.mp4", cap:"The reveal" },
+              { src:P+"v-hill.mp4",   cap:"The hill" } ],
+            note:"Acting and motion on top of the key frames." }
+        ],
+        // a side story: one shot that started as a drawing in my notebook
+        sketch: { title:"ONE SHOT", sub:"from a hand sketch", items:[
+            { src:P+"sk-1-hand.jpg",     cap:"My sketch", label:"sketch", fit:"contain" },
+            { src:P+"sk-2-paper.jpg",    cap:"Turned into a reference", label:"reference" },
+            { src:P+"sk-3-scene.jpg",    cap:"Placed in the scene", label:"in the scene" },
+            { src:P+"sk-4-animated.mp4", cap:"Animated", label:"animated" } ] },
+        final: { id:"vX-oKd3rJjI", note:"Cut, sound design, light and particles in AE." }
       }
+    };
+
+    const GALLERIES = [
+      { id:"ai", x:930, y:112, grid:true, clips:[
+        { id:"cFrAQUphw9w" },
+        { id:"Tdf8r3UTSKo" },
+        { id:"t7w9zrfC23o" },
+        { id:"GwVUHS4ICoY" }, { id:"piedj6jmcSM" },
+        { id:"Wow2pt4ICY8" }, { id:"8XYluk6R48g" }
+      ]},
+      { id:"ugc", x:1600, y:150, clips:[
+        { id:"kpi4qDDBNHs" }, { id:"sNv0KbdY40A" }, { id:"8C0jH5h0SkU" } ]},
+      // placeholder picks for now
+      { id:"more", x:1650, y:520, clips:[
+        { id:"4ocju5hdgsI" }, { id:"wctScyfR-aw" }, { id:"Q4pcstfcHyA" } ]}
+    ];
+
+    // HIGHLIGHTS — rotating; add `loop:"videos/hit-01.mp4"` to make each one move
+    const HITS = [
+      { id:"cFrAQUphw9w" }, { id:"kpi4qDDBNHs" }, { id:"Tdf8r3UTSKo" }, { id:"4ocju5hdgsI" }, { id:"sNv0KbdY40A" }
+    ];
+
+    const t = (id) => `<button class="tag" type="button" data-goto="${id}" style="--c:${TAGS[id].color}">${TAGS[id].tag}</button>`;
+
+    const INTRO_HTML = `
+      <p class="hi">Hi, I'm Ariel 👋</p>
+      <p>I'm a video editor and AI visual creator with a fine-art background (BFA, Bezalel). Over the years I've built a lot of experience in performance-driven ads: fast-paced, high-spend work with agencies and brands, plus organic content that actually grows the business.</p>
+      <p>My work moves between ${t('ai')}, ${t('ugc')} and ${t('more')}, from high-volume creatives built to perform at scale to carefully crafted pieces where every frame counts.</p>
+      <p>Pieces marked <span class="proc-cue proc-cue--inline">process</span> open up to show how they were made, from the first reference to the final cut.</p>
+      <p>Feel free to ${t('connect')}.</p>`;
+
+    const CONTACT_HTML = `
+      <h2>Let's make something.</h2>
+      <p>Open to freelance and collaborations.</p>
+      <div class="contact-actions">
+        <a class="btn" href="mailto:akhber@gmail.com">Email me</a>
+        <a class="lnk" href="https://www.linkedin.com/in/ariel-akhber-a75b20251" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="lnk" href="https://www.instagram.com/arielakhber/" target="_blank" rel="noopener">Instagram</a>
+      </div>`;
+
+    // wires: [from, to]. Ports sit near the top of each node.
+    const WIRES = [ ["hits","intro"], ["intro","ai"], ["ai","ugc"], ["ai","more"] ];
+
+    /* ========================================================= */
+
+    const PLAY = '<span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>';
+    const thumbSrc = (id) => `https://img.youtube.com/vi/${id}/sddefault.jpg`;
+    const thumbAlt = (id) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+    const imgTag = (id, lazy=true) => `<img class="thumb" src="${thumbSrc(id)}" onerror="this.onerror=null;this.src='${thumbAlt(id)}'" alt="Video still"${lazy?' loading="lazy"':''}>`;
+    const isVid = (s) => /\.(mp4|webm|mov)$/i.test(s);
+    const thumbOf = (s) => s.replace(/([^/]+)\.[a-z0-9]+$/i, 'thumbs/$1.jpg');
+    const loopTag = (src) => src ? `<video class="loopv" src="${src}" muted loop playsinline preload="none" aria-hidden="true"></video>` : '';
+
+    function cardHTML(v, g, i){
+      if(!v.id) return `<div class="card is-ph" aria-hidden="true"><span>clip ${String(i+1).padStart(2,'0')}<br>placeholder</span></div>`;
+      const capText = v.title || (v.process ? 'See how it was made' : '');
+      const cap = capText ? `<span class="cap">${capText}</span>` : '';
+      const cue = v.process ? '<span class="proc-cue">process</span>' : '';
+      const lbl = v.process ? 'Show how this was made' : (v.title ? 'Play '+v.title : 'Play video');
+      return `<button class="card" type="button" data-g="${g}" data-i="${i}" aria-label="${lbl}">${imgTag(v.id)}${loopTag(v.loop)}${PLAY}${cap}${cue}</button>`;
+    }
+    function label(id, meta){
+      return `<div class="lbl" data-handle><span class="tag" style="--c:${TAGS[id].color}">${TAGS[id].tag}</span>${meta ? `<span class="meta">${meta}</span>` : ''}</div>`;
+    }
+
+    const world = document.getElementById('world');
+    const canvas = document.getElementById('canvas');
+    const HEADER = 62;
+
+    function addNode(id, cls, x, y, inner){
+      const el = document.createElement('div');
+      el.className = 'node ' + cls;
+      el.id = 'n-' + id; el.dataset.node = id;
+      el.style.left = x + 'px'; el.style.top = y + 'px';
+      el.style.setProperty('--c', (TAGS[id] || TAGS.process).color);
+      el.innerHTML = inner;
+      world.appendChild(el);
+      return el;
+    }
+
+    addNode('hits', 'node--reel', 70, 150,
+      label('hits', `1/${HITS.length}`) +
+      `<button class="card card--reel" type="button" id="reelCard" aria-label="Play highlights">
+        ${HITS.map((v,i)=>`<span class="hit${i===0?' on':''}">${imgTag(v.id, i>0)}${loopTag(v.loop)}</span>`).join('')}${PLAY}</button>`);
+    addNode('intro', 'node--text panel', 356, 150, label('intro') + INTRO_HTML);
+    GALLERIES.forEach((g,gi) => addNode(g.id, 'node--gallery', g.x, g.y,
+      label(g.id, `${g.clips.filter(c=>c.id).length} clips`) +
+      `<div class="clips${g.grid?' clips--grid':''}"${g.grid?` style="--cols:${g.clips.length>6?4:3}"`:''}>${g.clips.map((c,i)=>cardHTML(c,gi,i)).join('')}</div>`));
+    addNode('connect', 'node--contact panel', 420, 640, label('connect') + CONTACT_HTML);
+
+    // the door to the process: a small visible node under @ai
+    const PEEK_KEY = Object.keys(PROCESSES)[0];
+    if(PEEK_KEY){
+      const pp=PROCESSES[PEEK_KEY], cover=(pp.steps.find(s=>s.key==='images')||pp.steps[0]).items[0];
+      addNode('peek', 'node--peek', 930, 700,
+        `<div class="lbl" data-handle><span class="tag" style="--c:${TAGS.process.color}">${TAGS.process.tag}</span><span class="meta">${pp.name}</span></div>
+        <button class="peek" type="button" data-open-proc="${PEEK_KEY}" aria-label="Open the process">
+          <span class="peek-thumb">${cover?`<img class="thumb" src="${thumbOf(cover.src)}" alt="">`:''}</span>
+          <span class="peek-body">
+            <span class="peek-title">How it's made</span>
+            <span class="peek-chain">${pp.steps.map(s=>`<b>${s.title}</b>`).join(' → ')}</span>
+          </span>
+          <span class="peek-open">Open ↓</span>
+        </button>`);
+    }
+
+    /* ---------- geometry helpers ---------- */
+    const svg = document.getElementById('wires');
+    const svgTop = document.getElementById('wiresTop');   // process wires draw above the process frame
+    const PORT_Y = 36;
+    function rect(id){ const e=document.getElementById('n-'+id); return e ? {x:e.offsetLeft,y:e.offsetTop,w:e.offsetWidth,h:e.offsetHeight} : null; }
+    function wpos(el){ let x=0,y=0,e=el; while(e && e!==world){ x+=e.offsetLeft; y+=e.offsetTop; e=e.offsetParent; } return {x,y,w:el.offsetWidth,h:el.offsetHeight}; }
+    function bez(ax,ay,bx,by){ const dx=Math.max(50,Math.abs(bx-ax)*.5); return `M ${ax} ${ay} C ${ax+dx} ${ay}, ${bx-dx} ${by}, ${bx} ${by}`; }
+    function vbez(ax,ay,bx,by){ const dy=Math.max(40,Math.abs(by-ay)*.5); return `M ${ax} ${ay} C ${ax} ${ay+dy}, ${bx} ${by-dy}, ${bx} ${by}`; }
+
+    /* ---------- wires + ports ---------- */
+    function drawWires(){
+      svg.innerHTML=''; svgTop.innerHTML=''; world.querySelectorAll('.port').forEach(p=>p.remove());
+      const seg = (ax,ay,bx,by,d,cls='') => {
+        const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+        p.setAttribute('d', d || bez(ax,ay,bx,by)); p.setAttribute('class','wire '+cls); (cls.includes('proc') ? svgTop : svg).appendChild(p);
+        [[ax,ay],[bx,by]].forEach(([x,y])=>{ const s=document.createElement('span'); s.className='port'+(cls.includes('proc')?' port--proc':''); s.style.left=x+'px'; s.style.top=y+'px'; world.appendChild(s); });
+      };
+      WIRES.forEach(([a,b])=>{ const A=rect(a),B=rect(b); if(A&&B) seg(A.x+A.w, A.y+PORT_Y, B.x, B.y+PORT_Y); });
+      // intro → contact: leaves the lower right of the text, enters contact from the right
+      const T=rect('intro'), C=rect('connect');
+      const ax=T.x+T.w, ay=T.y+T.h-40, bx=C.x+C.w, by=C.y+PORT_Y;
+      seg(ax,ay,bx,by,`M ${ax} ${ay} C ${ax+80} ${ay}, ${bx+80} ${by}, ${bx} ${by}`);
+
+      // @ai → the small process door underneath it
+      const P=rect('peek'), A=rect('ai');
+      if(P && A && !proc){ const x1=A.x+A.w/2, y1=A.y+A.h, x2=P.x+P.w/2, y2=P.y; seg(x1,y1,x2,y2,vbez(x1,y1,x2,y2),'wire--proc'); }
+
+      if(proc){
+        const frame = wpos(proc.el.querySelector('.proc')), L = wpos(proc.el.querySelector('.lbl'));
+        const media = k => wpos(proc.el.querySelector(`.step--${k} .tiles, .step--${k} .card`));
+        if(proc.card){
+          // selected clip → leaves from its left side, enters the process frame from the left
+          const card=wpos(proc.card), sx0=card.x, sy0=card.y+card.h/2, fx=frame.x, fy=frame.y+72;
+          seg(sx0,sy0,fx,fy,`M ${sx0} ${sy0} C ${sx0-120} ${sy0}, ${fx-120} ${fy}, ${fx} ${fy}`,'wire--proc');
+        } else {
+          // @ai → down into the process frame (lands just right of the @process tag)
+          const A=rect('ai'), x1=A.x+A.w/2, y1=A.y+A.h, x2=L.x+L.w+26, y2=frame.y;
+          seg(x1,y1,x2,y2,vbez(x1,y1,x2,y2),'wire--proc');
+        }
+        // step → step → … → final
+        const keys=[...proc.el.querySelectorAll('.proc > .step:not(.step--sketch)')].map(s=>s.dataset.k);
+        for(let k=0;k<keys.length-1;k++){ const A=media(keys[k]), B=media(keys[k+1]); seg(A.x+A.w, A.y+28, B.x, B.y+28, null, 'wire--proc'); }
+        // the sketch chain: tile → tile
+        const sk=[...proc.el.querySelectorAll('.sk-item .tile')].map(wpos);
+        for(let k=0;k<sk.length-1;k++){ const A=sk[k], B=sk[k+1]; seg(A.x+A.w, A.y+A.h/2, B.x, B.y+B.h/2, null, 'wire--proc'); }
+      }
+    }
+
+    /* ---------- pan / zoom ---------- */
+    let tx=0, ty=0, scale=1, bounds={minX:0,minY:0,maxX:0,maxY:0}, canvasMode=false, inited=false;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function measure(){
+      let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;
+      world.querySelectorAll('.node').forEach(el=>{
+        if(!el.offsetParent) return;   // hidden (e.g. the process door while the process is open)
+        minX=Math.min(minX,el.offsetLeft); minY=Math.min(minY,el.offsetTop-34);
+        maxX=Math.max(maxX,el.offsetLeft+el.offsetWidth); maxY=Math.max(maxY,el.offsetTop+el.offsetHeight);
+      });
+      bounds={minX,minY,maxX,maxY};
+      world.style.width=(maxX+80)+'px'; world.style.height=(maxY+80)+'px';
+    }
+    function clamp(){
+      const m=140, vw=canvas.clientWidth, vh=canvas.clientHeight;
+      const minTx=m-bounds.maxX*scale, maxTx=vw-m-bounds.minX*scale;
+      const minTy=m-bounds.maxY*scale, maxTy=vh-m-bounds.minY*scale;
+      tx=(minTx>maxTx)?(minTx+maxTx)/2:Math.min(maxTx,Math.max(minTx,tx));
+      ty=(minTy>maxTy)?(minTy+maxTy)/2:Math.min(maxTy,Math.max(minTy,ty));
+    }
+    function apply(){
+      if(canvasMode) clamp();
+      world.style.transform=`translate(${tx}px, ${ty}px) scale(${scale})`;
+      canvas.style.backgroundPosition=`${tx}px ${ty}px`;
+      canvas.style.backgroundSize=`${22*scale}px ${22*scale}px`;
+      document.getElementById('zoomVal').textContent=Math.round(scale*100)+'%';
+    }
+    function animateTo(){
+      if(reduce){ apply(); return; }
+      world.classList.add('animate'); apply(); setTimeout(()=>world.classList.remove('animate'),620);
+    }
+    // fit a set of nodes between the header and the bottom of the screen
+    function fitTo(ids, min, max, animate=true){
+      let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+      ids.forEach(id=>{ const e=document.getElementById('n-'+id); if(!e || !e.offsetParent) return;
+        x0=Math.min(x0,e.offsetLeft); y0=Math.min(y0,e.offsetTop-36);
+        x1=Math.max(x1,e.offsetLeft+e.offsetWidth); y1=Math.max(y1,e.offsetTop+e.offsetHeight); });
+      const side=40, top=HEADER+22, bottom=26, aw=canvas.clientWidth-side*2, ah=canvas.clientHeight-top-bottom;
+      scale=Math.min(max,Math.max(min,Math.min(aw/(x1-x0), ah/(y1-y0))));
+      tx=side+Math.max(0,(aw-(x1-x0)*scale)/2)-x0*scale;
+      ty=top+Math.max(0,(ah-(y1-y0)*scale)/2)-y0*scale;
+      animate ? animateTo() : apply();
+    }
+    function home(animate){ fitTo(['hits','intro','ai','peek','connect'], .7, 1.1, animate); }
+
+    function placeLayout(){
+      // contact sits under the intro text, whatever the text height turns out to be
+      const I=document.getElementById('n-intro'), C=document.getElementById('n-connect');
+      C.style.top=(I.offsetTop+I.offsetHeight+84)+'px';
+      // the process door sits right under @ai
+      const PK=document.getElementById('n-peek'), AI=document.getElementById('n-ai');
+      if(PK){ PK.style.left=AI.offsetLeft+'px'; PK.style.top=(AI.offsetTop+AI.offsetHeight+62)+'px'; PK.style.width=AI.offsetWidth+'px'; }
+      if(proc){ const A=document.getElementById('n-ai'); proc.el.style.left=(A.offsetLeft-60)+'px'; proc.el.style.top=(A.offsetTop+A.offsetHeight+110)+'px'; }
+    }
+    function layout(){
+      const on = window.innerWidth >= 900;
+      document.documentElement.classList.toggle('canvas-mode', on);
+      canvasMode=on;
+      if(on){ placeLayout(); measure(); drawWires(); if(!inited){ home(false); inited=true; } else apply(); }
+      else { world.style.cssText=''; canvas.style.backgroundPosition=''; canvas.style.backgroundSize=''; }
+    }
+    function ping(el){ el.classList.remove('ping'); void el.offsetWidth; el.classList.add('ping'); }
+    function goTo(id){
+      const el=document.getElementById('n-'+id); if(!el) return;
+      if(!canvasMode){ el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'}); ping(el); return; }
+      scale=Math.max(scale,.9);
+      tx=canvas.clientWidth/2-(el.offsetLeft+el.offsetWidth/2)*scale;
+      ty=(canvas.clientHeight+HEADER)/2-(el.offsetTop+el.offsetHeight/2)*scale;
+      animateTo(); setTimeout(()=>ping(el), reduce?0:420);
+    }
+    function zoomBy(f, cx=canvas.clientWidth/2, cy=canvas.clientHeight/2){
+      const wx=(cx-tx)/scale, wy=(cy-ty)/scale;
+      scale=Math.min(1.6,Math.max(.35,scale*f));
+      tx=cx-wx*scale; ty=cy-wy*scale; world.classList.remove('animate'); apply();
+    }
+
+    /* ---------- process: unfolds under @ai ---------- */
+    let proc=null;   // { key, el, card }
+    let MEDIA=[];    // every picture/video of the open process, in order (for the lightbox)
+    function tileHTML(it, shape, stepTitle){
+      const n=MEDIA.push({...it, step:stepTitle})-1;
+      if(!it.src) return `<div class="tile ${shape}"><span>${n+1}</span></div>`;
+      const vid=isVid(it.src);
+      return `<button class="tile has ${shape}${vid?' is-vid':''}${it.fit==='contain'?' fit-contain':''}" type="button" data-media="${n}" aria-label="${it.cap||'Open'}">`+
+        `<img src="${thumbOf(it.src)}" alt="" loading="lazy">`+
+        (vid?`<video src="${it.src}" muted loop playsinline preload="none" aria-hidden="true"></video>`:'')+`</button>`;
+    }
+    function processHTML(key){
+      const p=PROCESSES[key]; MEDIA=[];
+      const step=(k,title,sub,body,note)=>`<div class="step step--${k}" data-k="${k}"><div class="step-h"><b>${title}</b> <span>· ${sub}</span></div>${body}${note?`<p class="note">${note}</p>`:''}</div>`;
+      const steps=p.steps.map(s=>step(s.key, s.title, s.sub,
+        `<div class="tiles t-${s.shape}">${s.items.map(it=>tileHTML(it,s.shape,s.title)).join('')}</div>`, s.note)).join('');
+      const fin = p.final.id
+        ? `<button class="card" type="button" data-yt="${p.final.id}" aria-label="Play the film">${imgTag(p.final.id)}${PLAY}</button>`
+        : `<div class="card is-ph"><span>the edited film<br>placeholder</span></div>`;
+      const sketch = p.sketch ? step('sketch', p.sketch.title, p.sketch.sub,
+        `<div class="sk-row">${p.sketch.items.map(it=>`<div class="sk-item">${tileHTML(it,'sk',p.sketch.title)}<span class="sk-lbl">${it.label||''}</span></div>`).join('')}</div>`, '') : '';
+      return label('process') +
+        `<button class="proc-close" type="button" data-close-proc aria-label="Close process">×</button>
+        <div class="proc" style="grid-template-columns:repeat(${p.steps.length+1},auto)">
+          <div class="proc-title"><span class="pt">${p.name}</span><span class="meta">${p.meta||''}</span></div>
+          ${steps}
+          ${step('final','FINAL','the cut',fin,p.final.note)}
+          ${sketch}
+        </div>`;
+    }
+    function openProcess(key, card=null){
+      if(!PROCESSES[key]) return;
+      closeProcess(true);
+      const el=document.createElement('div');
+      el.className='node node--process'; el.id='n-process'; el.dataset.node='process';
+      el.style.setProperty('--c', TAGS.process.color);
+      el.innerHTML=processHTML(key);
+      world.appendChild(el);
+      if(card) card.classList.add('sel');
+      proc={key,el,card};
+      // video tiles play silently on hover
+      el.querySelectorAll('.tile.is-vid').forEach(t=>{ const v=t.querySelector('video');
+        t.addEventListener('pointerenter',()=>{ v.play().then(()=>t.classList.add('playing')).catch(()=>{}); });
+        t.addEventListener('pointerleave',()=>{ v.pause(); v.currentTime=0; t.classList.remove('playing'); }); });
+      document.documentElement.classList.add('proc-open');
+      requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('in')));
+      hideHint();
+      if(canvasMode){ placeLayout(); measure(); drawWires(); fitTo(['process'], .45, 1); }
+      else el.scrollIntoView({behavior:reduce?'auto':'smooth', block:'start'});
+    }
+    function closeProcess(silent){
+      if(!proc) return;
+      proc.el.remove(); if(proc.card) proc.card.classList.remove('sel'); proc=null;
+      document.documentElement.classList.remove('proc-open');
+      if(canvasMode){ measure(); drawWires(); if(!silent) goTo('ai'); }
+    }
+
+    /* ---------- drag: empty space pans, a node's tag label moves the node ---------- */
+    let mode=null, sx=0, sy=0, stx=0, sty=0, moved=false, justDragged=false, dragEl=null, nx=0, ny=0;
+    canvas.addEventListener('pointerdown', e=>{
+      if(!canvasMode || (e.button!==undefined && e.button!==0)) return;
+      hideHint(); moved=false; sx=e.clientX; sy=e.clientY;
+      const handle=e.target.closest('[data-handle]');
+      if(handle){ mode='node'; dragEl=handle.closest('.node'); nx=dragEl.offsetLeft; ny=dragEl.offsetTop; dragEl.classList.add('dragging'); }
+      else { mode='pan'; stx=tx; sty=ty; canvas.classList.add('grabbing'); world.classList.remove('animate'); }
+      window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp, {once:true});
     });
+    function onMove(e){
+      const dx=e.clientX-sx, dy=e.clientY-sy;
+      if(Math.hypot(dx,dy)>4) moved=true;
+      if(mode==='pan'){ tx=stx+dx; ty=sty+dy; apply(); }
+      else if(mode==='node'){ dragEl.style.left=(nx+dx/scale)+'px'; dragEl.style.top=(ny+dy/scale)+'px'; drawWires(); }
+    }
+    function onUp(){
+      window.removeEventListener('pointermove', onMove);
+      if(mode==='node'){ dragEl.classList.remove('dragging'); measure(); }
+      canvas.classList.remove('grabbing');
+      if(moved){ justDragged=true; setTimeout(()=>justDragged=false,30); }
+      mode=null; dragEl=null;
+    }
+    canvas.addEventListener('click', e=>{ if(justDragged){ justDragged=false; e.stopPropagation(); e.preventDefault(); } }, true);
+
+    /* wheel / trackpad:
+       two-finger scroll → pan in any direction (like Figma / Spaces)
+       pinch (sent as ctrl+wheel) or Ctrl/Cmd + mouse wheel → zoom
+       Shift + mouse wheel → pan sideways */
+    canvas.addEventListener('wheel', e=>{
+      if(!canvasMode) return; e.preventDefault(); hideHint();
+      const r=canvas.getBoundingClientRect();
+      const unit = e.deltaMode===1 ? 16 : e.deltaMode===2 ? canvas.clientHeight : 1;
+      let dx=e.deltaX*unit, dy=e.deltaY*unit;
+      if(e.ctrlKey || e.metaKey){
+        const d=Math.max(-20,Math.min(20,dy));
+        zoomBy(Math.exp(-d*0.01), e.clientX-r.left, e.clientY-r.top);
+        return;
+      }
+      if(e.shiftKey && !dx){ dx=dy; dy=0; }
+      tx-=dx; ty-=dy; world.classList.remove('animate'); apply();
+    }, {passive:false});
+    // Safari on Mac reports pinch as gesture events
+    let gScale=1;
+    canvas.addEventListener('gesturestart', e=>{ if(!canvasMode) return; e.preventDefault(); gScale=1; });
+    canvas.addEventListener('gesturechange', e=>{
+      if(!canvasMode) return; e.preventDefault();
+      const r=canvas.getBoundingClientRect();
+      zoomBy(e.scale/gScale, e.clientX-r.left, e.clientY-r.top); gScale=e.scale;
+    });
+
+    /* ---------- clicks: tags, cards, process, toolbar ---------- */
+    document.addEventListener('click', e=>{
+      if(e.target.closest('[data-home]')){ closeProcess(true); if(canvasMode) home(true); else window.scrollTo({top:0,behavior:reduce?'auto':'smooth'}); return; }
+      const go=e.target.closest('[data-goto]'); if(go){ if(proc) closeProcess(true); goTo(go.dataset.goto); return; }
+      if(e.target.closest('[data-close-proc]')){ closeProcess(); return; }
+      const op=e.target.closest('[data-open-proc]'); if(op){ openProcess(op.dataset.openProc); return; }
+      const md=e.target.closest('[data-media]'); if(md){ openMedia(+md.dataset.media); return; }
+      const yt=e.target.closest('[data-yt]'); if(yt){ openModal({id:yt.dataset.yt}); return; }
+      const c=e.target.closest('.card[data-g]');
+      if(c){
+        const g=+c.dataset.g, i=+c.dataset.i, clip=GALLERIES[g].clips[i];
+        if(clip.process && PROCESSES[clip.process]){ if(proc && proc.card===c) openModal(clip); else openProcess(clip.process, c); }
+        else openModal(clip);
+        return;
+      }
+      // a plain click on empty canvas folds the process back
+      if(proc && e.target.closest('#canvas') && !e.target.closest('.node')) closeProcess();
+    });
+    document.getElementById('zoomIn').addEventListener('click', ()=>zoomBy(1.2));
+    document.getElementById('zoomOut').addEventListener('click', ()=>zoomBy(1/1.2));
+    document.getElementById('homeBtn').addEventListener('click', ()=>{ closeProcess(true); home(true); });
+    const hint=document.getElementById('hint'); let hinted=false;
+    function hideHint(){ if(!hinted){ hinted=true; hint.classList.add('hide'); } }
+
+    /* ---------- Work dropdown ---------- */
+    const WORK_MENU = ['hits','ai','ugc','more'];
+    const workMenu=document.getElementById('workMenu'), workBtn=document.getElementById('workBtn');
+    document.getElementById('workList').innerHTML = WORK_MENU.map(id=>{
+      const g=GALLERIES.find(x=>x.id===id);
+      const meta = g ? `${g.clips.filter(c=>c.id).length} clips` : `${HITS.length} clips`;
+      return `<button class="menu-item" type="button" role="menuitem" data-goto="${id}"><span class="tag" style="--c:${TAGS[id].color}">${TAGS[id].tag}</span><span class="meta">${meta}</span></button>`;
+    }).join('');
+    function setMenu(open){ workMenu.classList.toggle('open',open); workBtn.setAttribute('aria-expanded',open); if(open) hideHint(); }
+    workBtn.addEventListener('click', ()=>setMenu(!workMenu.classList.contains('open')));
+    document.addEventListener('click', e=>{ if(!e.target.closest('#workMenu') || e.target.closest('.menu-item')) setMenu(false); });
+    canvas.addEventListener('pointerdown', ()=>setMenu(false));
+
+    /* ---------- highlights (rotating) ---------- */
+    const hitEls=[...document.querySelectorAll('#reelCard .hit')], hitMeta=document.querySelector('#n-hits .lbl .meta'); let ri=0;
+    function showHit(n){
+      const prev=hitEls[ri].querySelector('video'); if(prev) prev.pause();
+      hitEls[ri].classList.remove('on'); ri=n; hitEls[ri].classList.add('on');
+      const v=hitEls[ri].querySelector('video'); if(v && !reduce){ v.currentTime=0; v.play().catch(()=>{}); }
+      hitMeta.textContent=`${ri+1}/${hitEls.length}`;
+    }
+    if(hitEls.length>1 && !reduce) setInterval(()=>showHit((ri+1)%hitEls.length), 3000);
+    if(!reduce){ const v0=hitEls[0].querySelector('video'); if(v0) v0.play().catch(()=>{}); }
+    document.getElementById('reelCard').addEventListener('click', ()=>{ if(!justDragged) openModal(HITS[ri]); });
+
+    /* ---------- hover loops (cards that have a `loop` file) ---------- */
+    document.querySelectorAll('.card[data-g] .loopv').forEach(v=>{
+      const card=v.closest('.card');
+      card.addEventListener('pointerenter', ()=>{ v.play().then(()=>card.classList.add('playing')).catch(()=>{}); });
+      card.addEventListener('pointerleave', ()=>{ v.pause(); v.currentTime=0; card.classList.remove('playing'); });
+    });
+    if('IntersectionObserver' in window && !reduce){
+      // on phones there is no hover: play while the card is on screen
+      const io=new IntersectionObserver(es=>es.forEach(en=>{
+        if(canvasMode) return; const v=en.target.querySelector('.loopv');
+        if(en.isIntersecting){ v.play().then(()=>en.target.classList.add('playing')).catch(()=>{}); }
+        else { v.pause(); en.target.classList.remove('playing'); }
+      }), {threshold:.6});
+      document.querySelectorAll('.card[data-g]').forEach(c=>{ if(c.querySelector('.loopv')) io.observe(c); });
+    }
+
+    /* ---------- video modal ---------- */
+    const modal=document.getElementById('modal'), frame=document.getElementById('frame'), modalContent=document.getElementById('modalContent');
+    function openModal(clip){
+      if(!clip || !clip.id) return;
+      modalContent.classList.toggle('wide', clip.aspect==='16/9');
+      frame.src='https://www.youtube-nocookie.com/embed/'+clip.id+'?autoplay=1&rel=0&playsinline=1&modestbranding=1';
+      modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.querySelector('.modal-close').focus();
+    }
+    function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); frame.src=''; }
+    document.querySelector('.modal-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
+
+    /* ---------- lightbox for process pictures and shots ---------- */
+    const lb=document.getElementById('lightbox'), lbMedia=document.getElementById('lbMedia'), lbCap=document.getElementById('lbCap'); let lbi=0;
+    function openMedia(i){
+      const list=MEDIA.filter(m=>m.src); if(!list.length) return;
+      const n=MEDIA.length; lbi=((i%n)+n)%n; if(!MEDIA[lbi].src) return;
+      const it=MEDIA[lbi];
+      lbMedia.innerHTML = isVid(it.src) ? `<video src="${it.src}" controls autoplay playsinline loop></video>` : `<img src="${it.src}" alt="${it.cap||''}">`;
+      lbCap.innerHTML = `<b>${it.step}</b> · ${it.cap||''} · ${lbi+1}/${n}`;
+      lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
+    }
+    function closeMedia(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbMedia.innerHTML=''; }
+    lb.querySelector('.lb-close').addEventListener('click', closeMedia);
+    lb.querySelector('.lb-prev').addEventListener('click', ()=>openMedia(lbi-1));
+    lb.querySelector('.lb-next').addEventListener('click', ()=>openMedia(lbi+1));
+    lb.addEventListener('click', e=>{ if(e.target===lb) closeMedia(); });
+
+    /* ---------- keyboard ---------- */
+    document.addEventListener('keydown', e=>{
+      if(e.key==='Escape'){ setMenu(false); if(lb.classList.contains('open')) closeMedia(); else if(modal.classList.contains('open')) closeModal(); else if(proc) closeProcess(); return; }
+      if(lb.classList.contains('open')){ if(e.key==='ArrowLeft'){ e.preventDefault(); openMedia(lbi-1); } else if(e.key==='ArrowRight'){ e.preventDefault(); openMedia(lbi+1); } return; }
+      if(!canvasMode || modal.classList.contains('open') || e.altKey || e.ctrlKey || e.metaKey) return;
+      const step=e.shiftKey?260:110, k=e.key;
+      if(k==='+'||k==='='){ zoomBy(1.2); hideHint(); return; }
+      if(k==='-'||k==='_'){ zoomBy(1/1.2); hideHint(); return; }
+      if(k==='0'){ closeProcess(true); home(true); return; }
+      if(k==='ArrowLeft') tx+=step; else if(k==='ArrowRight') tx-=step;
+      else if(k==='ArrowUp') ty+=step; else if(k==='ArrowDown') ty-=step;
+      else return;
+      e.preventDefault(); hideHint(); animateTo();
+    });
+
+    /* ---------- init ---------- */
+    layout();
+    let rt; window.addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(layout,120); });
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ if(canvasMode){ placeLayout(); measure(); drawWires(); if(!proc && !hinted) home(false); else apply(); } });
   </script>
 </body>
 </html>
-
-
-
-
-
-
